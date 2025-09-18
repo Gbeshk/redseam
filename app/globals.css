@@ -1,0 +1,9 @@
+@import "tailwindcss";
+:root {
+  --font-sans: var(--font-poppins);
+  --default-font-family: var(--font-poppins);
+}
+
+html, body {
+  font-family: var(--font-poppins), sans-serif;
+}
