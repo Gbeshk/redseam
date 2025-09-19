@@ -17,7 +17,7 @@ export default function Header() {
   }, []);
 
   return (
-    <div className="max-w-[1920px] w-full h-[80px] px-[120px] flex items-center justify-between mx-auto">
+    <div className="max-w-[1920px] w-full h-[80px] px-[100px] flex items-center justify-between mx-auto">
       <HeaderLogo />
 
       {!isLoggedIn && <HeaderLogin />}

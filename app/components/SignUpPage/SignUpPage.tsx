@@ -211,7 +211,7 @@ const SignUpPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-[1920px] w-full flex">
+    <div className="max-w-[1920px] w-full flex mx-auto">
       <Image
         src={LoginPicture}
         alt="loginPic"

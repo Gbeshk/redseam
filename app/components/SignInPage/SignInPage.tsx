@@ -9,7 +9,7 @@ export default function SignInPage() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
 
   return (
-    <div className="max-w-[1920px] w-full flex">
+    <div className="max-w-[1920px] w-full flex mx-auto">
       <Image
         src={LoginPicture}
         alt="loginPic"

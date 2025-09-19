@@ -6,4 +6,5 @@
 
 html, body {
   font-family: var(--font-poppins), sans-serif;
+  padding-bottom: 112px;
 }
