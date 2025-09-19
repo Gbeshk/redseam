@@ -14,14 +14,16 @@ function getCookie(name: string): string | null {
   return null;
 }
 
-export default function HeaderProfile() {
+interface HeaderProfileProps {
+  onArrowClick: () => void;
+}
+
+export default function HeaderProfile({ onArrowClick }: HeaderProfileProps) {
   const [profileUrl, setProfileUrl] = useState<string>(defaultProfile.src);
 
   useEffect(() => {
     try {
       const userCookie = getCookie("user");
-      console.log(userCookie);
-
       if (!userCookie) return;
 
       const user: User = JSON.parse(decodeURIComponent(userCookie));
@@ -55,6 +57,7 @@ export default function HeaderProfile() {
         width={20}
         height={20}
         className="w-[20px] h-[20px] ml-[4px] cursor-pointer"
+        onClick={onArrowClick}
       />
     </div>
   );
