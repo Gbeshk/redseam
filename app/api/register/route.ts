@@ -5,29 +5,23 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
 
     for (const [key, value] of formData.entries()) {
-      console.log(
-        `${key}:`,
-        value instanceof File ? `File: ${value.name}` : value
-      );
+      console.log(`${key}:`, value instanceof File ? `File: ${value.name}` : value);
     }
 
-    const response = await fetch(
-      "https://api.redseam.redberryinternship.ge/api/register",
-      {
-        method: "POST",
-        body: formData,
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        Accept: "application/json",
+      },
+    });
 
     const text = await response.text();
     console.log("API Response text:", text.substring(0, 200) + "...");
 
     let data: unknown;
     try {
-      data = JSON.parse(text);
+      data = text ? JSON.parse(text) : { message: "No response body" };
     } catch {
       if (text.includes("<!doctype html>") || text.includes("<html>")) {
         return NextResponse.json(
@@ -38,13 +32,19 @@ export async function POST(req: NextRequest) {
           { status: 500 }
         );
       }
-      data = { message: text || "Invalid response from server" };
+      data = {
+        message: text || "Invalid response from server",
+        errors: text.toLowerCase().includes("username")
+          ? { username: "This username is already taken" }
+          : text.toLowerCase().includes("email")
+          ? { email: "This email is already registered" }
+          : undefined,
+      };
     }
 
     return NextResponse.json(data, { status: response.status });
   } catch (err: unknown) {
     console.error("API route error:", err);
-
     const message = "Server proxy error. Please try again.";
     let debug: string | undefined = undefined;
 
@@ -52,12 +52,6 @@ export async function POST(req: NextRequest) {
       debug = err.message;
     }
 
-    return NextResponse.json(
-      {
-        message,
-        debug,
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ message, debug }, { status: 500 });
   }
 }
