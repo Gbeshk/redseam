@@ -2,6 +2,7 @@ import { SignUpFormProps } from "@/app/types/sign-up-types/sign-up-types";
 import React from "react";
 import SignUpFormInput from "../SignUpFormInput/SignUpFormInput";
 import SignUpPasswordIcon from "../SignUpPasswordIcon/SignUpPasswordIcon";
+import { useRouter } from "next/navigation";
 
 const SignUpForm: React.FC<SignUpFormProps> = ({
   onSubmit,
@@ -28,7 +29,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
       showRequired && (!value || (typeof value === "string" && !value.trim()));
     return hasError ? `${baseText} *` : baseText;
   };
-
+  const router = useRouter();
   return (
     <form
       onSubmit={handleSubmit}
@@ -90,7 +91,12 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
 
       <p className="text-[#3E424A] text-[14px] leading-[100%] tracking-[0] text-center">
         Already member?
-        <span className="ml-[8px] text-[#FF4000] cursor-pointer hover:underline transition-all duration-200 hover:text-[#e63900]">
+        <span
+          onClick={() => {
+            router.push("/sign-in");
+          }}
+          className="ml-[8px] text-[#FF4000] cursor-pointer hover:underline transition-all duration-200 hover:text-[#e63900]"
+        >
           Log in
         </span>
       </p>

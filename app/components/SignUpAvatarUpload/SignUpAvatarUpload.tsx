@@ -54,7 +54,7 @@ const SignUpAvatarUpload: React.FC<SignUpAvatarUploadProps> = ({
     <div className="mt-[52px] flex items-center">
       <label
         htmlFor="signUpImageUpload"
-        className="w-[100px] h-[100px] rounded-full border-[1px] border-[#E1DFE1] flex items-center justify-center cursor-pointer transition-all duration-200 hover:border-[#FF4000] hover:border-opacity-50 hover:bg-[#FF4000] hover:bg-opacity-5 relative overflow-hidden"
+        className="w-[100px] h-[100px] rounded-full border border-[#D1D5DB] flex items-center justify-center cursor-pointer transition-colors duration-300 ease-in-out hover:border-gray-500 hover:bg-gray-100"
       >
         {avatar ? (
           <Image

@@ -55,3 +55,20 @@ export interface SignUpFormProps {
   showConfirmPassword: boolean;
   showRequired: boolean;
 }
+export interface User {
+  id?: number;
+  username?: string;
+  email?: string;
+  is_admin?: number;
+  avatar?: string;
+}
+export interface SignUpApiResponsee {
+  message: string;
+  errors?: {
+    username?: string[];
+    email?: string[];
+    password?: string[];
+    password_confirmation?: string[];
+    avatar?: string[];
+  };
+}
