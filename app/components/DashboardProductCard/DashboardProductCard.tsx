@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface Product {
   id: number;
@@ -15,8 +18,14 @@ interface DashboardProductCardProps {
 export const DashboardProductCard: React.FC<DashboardProductCardProps> = ({
   product,
 }) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/dashboard/products/${product.id}`);
+  };
+
   return (
-    <div className="w-[412px] h-auto cursor-pointer">
+    <div onClick={handleClick} className="w-[412px] h-auto cursor-pointer">
       <Image
         src={product.cover_image}
         alt={product.name}
