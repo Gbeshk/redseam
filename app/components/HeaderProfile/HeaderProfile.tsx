@@ -24,7 +24,6 @@ export default function HeaderProfile({ onArrowClick }: HeaderProfileProps) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // Use cart context instead of local state
   const {
     cartItems,
     cartCount,
@@ -83,6 +82,7 @@ export default function HeaderProfile({ onArrowClick }: HeaderProfileProps) {
   };
 
   const updateQuantity = async (id: number, newQuantity: number) => {
+    if (newQuantity < 1) return; // Prevent quantity from going below 1
     try {
       await updateCartItem(id, newQuantity);
     } catch (err) {
@@ -98,10 +98,16 @@ export default function HeaderProfile({ onArrowClick }: HeaderProfileProps) {
     }
   };
 
+  const getSubtotalPrice = () => {
+    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
+
+  const getDeliveryPrice = () => {
+    return 5; // Fixed $5 delivery
+  };
+
   const getTotalPrice = () => {
-    return cartItems
-      .reduce((total, item) => total + item.price * item.quantity, 0)
-      .toFixed(2);
+    return getSubtotalPrice() + getDeliveryPrice();
   };
 
   return (
@@ -150,21 +156,22 @@ export default function HeaderProfile({ onArrowClick }: HeaderProfileProps) {
           />
 
           <div
-            className={`fixed top-0 right-0 h-full w-[540px] bg-white shadow-2xl transform transition-transform duration-500 ease-out ${
+            className={`fixed top-0 right-0 h-full w-[540px] bg-white pb-[40px] shadow-2xl transform transition-transform duration-500 ease-out ${
               isCartOpen ? "translate-x-0" : "translate-x-full"
             }`}
           >
             <div className="flex flex-col h-full">
-              <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between px-[40px] pt-[40px] border-gray-200">
                 <h2 className="text-[24px] font-semibold text-[#10151F]">
-                  Shopping Cart: ({cartItems.length})
+                  Shopping cart: ({cartItems.length})
                 </h2>
                 <button
                   onClick={closeCart}
                   className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  aria-label="Close cart"
                 >
                   <svg
-                    className="w-6 h-6"
+                    className="w-[32px] h-[32px] cursor-pointer"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -179,7 +186,7 @@ export default function HeaderProfile({ onArrowClick }: HeaderProfileProps) {
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-6">
+              <div className="flex-1 overflow-y-auto px-[40px] mt-[56px] ">
                 {error && (
                   <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
                     {error}
@@ -210,80 +217,72 @@ export default function HeaderProfile({ onArrowClick }: HeaderProfileProps) {
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="flex flex-col gap-[36px] ">
                     {cartItems.map((item) => (
-                      <div
-                        key={item.id}
-                        className="flex gap-4 p-4 bg-gray-50 rounded-lg"
-                      >
-                        <div className="w-20 h-20 bg-gray-200 rounded-md flex items-center justify-center overflow-hidden">
-                          {item.image ? (
+                      <div key={item.id} className="flex">
+                        <div className="w-[100px] h-[134px] bg-gray-200 rounded-[10px]  border-[1px] border-[#E1DFE1] flex items-center justify-center overflow-hidden">
+                          {item.cover_image ? (
                             <Image
-                              src={item.image}
+                              src={item.cover_image}
                               alt={item.name}
-                              width={80}
-                              height={80}
+                              width={100}
+                              height={134}
                               className="w-full h-full object-cover"
                             />
                           ) : (
                             <span className="text-xs text-gray-500">Image</span>
                           )}
                         </div>
-
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-medium text-[#10151F] truncate">
-                            {item.name}
-                          </h3>
-                          <p className="text-sm text-gray-500 mt-1">
-                            Color: {item.color} | Size: {item.size}
+                        <div className="h-[117px] my-auto ml-[16px] w-full flex flex-col justify-between">
+                          <div className="flex justify-between items-center w-full">
+                            <p className="font-medium text-[14px]  text-[#10151F] capitalize">
+                              {item.name}
+                            </p>
+                            <p className="font-medium text-[18px]  text-[#10151F] capitalize">
+                              $ {item.price.toFixed(2)}
+                            </p>
+                          </div>
+                          <p className="text-[#3E424A] font-normal text-[12px]">
+                            {item.color}
                           </p>
-                          <p className="text-[16px] font-semibold text-[#10151F] mt-2">
-                            ${item.price.toFixed(2)}
+                          <p className="text-[#3E424A] font-normal text-[12px]">
+                            {item.size}
                           </p>
-                        </div>
-
-                        <div className="flex flex-col items-end gap-2">
-                          <button
-                            onClick={() => removeItem(item.id)}
-                            className="text-gray-400 hover:text-red-500 transition-colors"
-                          >
-                            <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                              />
-                            </svg>
-                          </button>
-
-                          <div className="flex items-center gap-2">
+                          <div className="h-[26px] flex justify-between items-center">
+                            <div className="w-[70px] h-[26px] flex items-center justify-around rounded-[22px] border-[1px] border-[#E1DFE1]">
+                              <button
+                                onClick={() =>
+                                  updateQuantity(item.id, item.quantity - 1)
+                                }
+                                disabled={item.quantity <= 1}
+                                className={`w-[24px] h-[24px] rounded-full flex items-center justify-center transition-colors ${
+                                  item.quantity <= 1 
+                                    ? 'cursor-default' 
+                                    : 'cursor-pointer hover:bg-gray-100'
+                                }`}
+                                style={{
+                                  color: item.quantity <= 1 ? '#E1DFE1' : 'inherit'
+                                }}
+                              >
+                                -
+                              </button>
+                              <span className="font-normal text-[12px] text-[#3E424A]">
+                                {item.quantity}
+                              </span>
+                              <button
+                                onClick={() =>
+                                  updateQuantity(item.id, item.quantity + 1)
+                                }
+                                className="w-[24px] h-[24px] rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors"
+                              >
+                                +
+                              </button>
+                            </div>
                             <button
-                              onClick={() =>
-                                updateQuantity(
-                                  item.id,
-                                  Math.max(0, item.quantity - 1)
-                                )
-                              }
-                              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
+                              className="text-[12px] text-[#3E424A] hover:underline cursor-pointer"
+                              onClick={() => removeItem(item.id)}
                             >
-                              -
-                            </button>
-                            <span className="min-w-[2rem] text-center font-medium">
-                              {item.quantity}
-                            </span>
-                            <button
-                              onClick={() =>
-                                updateQuantity(item.id, item.quantity + 1)
-                              }
-                              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
-                            >
-                              +
+                              Remove
                             </button>
                           </div>
                         </div>
@@ -292,29 +291,35 @@ export default function HeaderProfile({ onArrowClick }: HeaderProfileProps) {
                   </div>
                 )}
               </div>
-
               {cartItems.length > 0 && (
-                <div className="border-t border-gray-200 p-6 bg-white">
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-[18px] font-medium text-[#10151F]">
-                      Total:
-                    </span>
-                    <span className="text-[24px] font-semibold text-[#10151F]">
-                      ${getTotalPrice()}
-                    </span>
+                <div className="px-[40px]">
+                  <div className="flex flex-col">
+                    <div className="flex items-center justify-between h-[24px]">
+                      <p className="text-[#3E424A] text-[16px]">
+                        Items subtotal
+                      </p>
+                      <p className="text-[#3E424A] text-[16px]">
+                        $ {Math.round(getSubtotalPrice())}
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-between h-[24px] mt-[16px]">
+                      <p className="text-[#3E424A] text-[16px]">Delivery</p>
+                      <p className="text-[#3E424A] text-[16px]">
+                        $ {getDeliveryPrice()}
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-between h-[30px] mt-[16px]">
+                      <p className="text-[#3E424A] text-[20px] font-medium">
+                        Total
+                      </p>
+                      <p className="text-[#3E424A] text-[20px] font-medium">
+                        $ {Math.round(getTotalPrice())}
+                      </p>
+                    </div>
                   </div>
-
-                  <div className="space-y-3">
-                    <button className="w-full h-[50px] bg-[#FF4000] text-white rounded-lg font-medium hover:bg-[#e63600] transition-colors">
-                      Checkout
-                    </button>
-                    <button
-                      className="w-full h-[50px] border border-gray-300 text-[#10151F] rounded-lg font-medium hover:bg-gray-50 transition-colors"
-                      onClick={closeCart}
-                    >
-                      Continue Shopping
-                    </button>
-                  </div>
+                  <button className="mt-[98px] h-[59px] w-full bg-[#FF4000] text-white rounded-[10px] cursor-pointer font-medium text-[18px] hover:bg-[#E63600] transition-colors">
+                    Go to checkout
+                  </button>
                 </div>
               )}
             </div>
