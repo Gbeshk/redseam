@@ -89,7 +89,7 @@ export const ProductPageImage: React.FC<ProductPageImageProps> = ({
             isLoading ? "opacity-0" : "opacity-100"
           } transition-opacity duration-200 ${
             isSelected
-              ? "ring-2 ring-black shadow-lg"
+              ? "hover:ring-1 hover:ring-gray-300"
               : "hover:ring-1 hover:ring-gray-300"
           } ${onClick ? "cursor-pointer" : ""}`}
         />

@@ -164,7 +164,7 @@ export default function DashboardProductsPage() {
         currentPage,
         appliedPriceFrom,
         appliedPriceTo,
-        sortBy || "-created_at"
+        sortBy
       );
     }
   }, [

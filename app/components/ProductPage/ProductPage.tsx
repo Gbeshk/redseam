@@ -16,6 +16,7 @@ import { ProductPageErrorBoundary } from "../ProductPageErrorBoundary/ProductPag
 import { ProductPageBreadcrumb } from "../ProductPageBreadcrumb/ProductPageBreadcrumb";
 import { ProductPageImageGallery } from "../ProductPageImageGallery/ProductPageImageGallery";
 import { ProductPageDetails } from "../ProductPageDetails/ProductPageDetails";
+import { ProductPageNotFound } from "../ProductPageNotFound/ProductPageNotFound";
 
 function ProductPage() {
   const params = useParams();
@@ -24,6 +25,7 @@ function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<ApiError | null>(null);
+  const [notFound, setNotFound] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
@@ -32,13 +34,14 @@ function ProductPage() {
 
   const fetchProduct = useCallback(async () => {
     if (!params.id) {
-      setError({ message: "Product ID is missing" });
+      setNotFound(true);
       setLoading(false);
       return;
     }
 
     setLoading(true);
     setError(null);
+    setNotFound(false);
 
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -49,6 +52,12 @@ function ProductPage() {
       }
 
       const data = await apiRequest(`${apiUrl}/products/${params.id}`);
+
+      // Handle 404 case (API returns null)
+      if (data === null) {
+        setNotFound(true);
+        return;
+      }
 
       if (!data || typeof data !== "object") {
         throw new ValidationError("Invalid product data received from server");
@@ -170,11 +179,34 @@ function ProductPage() {
   ]);
 
   if (loading) return <ProductPageLoadingSpinner />;
-  if (error)
+
+  if (notFound) {
+    return (
+      <ProductPageErrorBoundary>
+        <div className="max-w-[1720px] w-full mx-auto mt-[52px] px-4">
+          <ProductPageBreadcrumb />
+          <ProductPageNotFound productId={params.id as string} />
+        </div>
+      </ProductPageErrorBoundary>
+    );
+  }
+
+  if (error) {
     return (
       <ProductPageErrorMessage message={error.message} onRetry={fetchProduct} />
     );
-  if (!product) return <ProductPageErrorMessage message="Product not found" />;
+  }
+
+  if (!product) {
+    return (
+      <ProductPageErrorBoundary>
+        <div className="max-w-[1720px] w-full mx-auto mt-[52px] px-4">
+          <ProductPageBreadcrumb />
+          <ProductPageNotFound productId={params.id as string} />
+        </div>
+      </ProductPageErrorBoundary>
+    );
+  }
 
   return (
     <ProductPageErrorBoundary>

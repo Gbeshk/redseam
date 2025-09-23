@@ -3,6 +3,7 @@
 import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { ProductPageLoadingSpinner } from "../ProductPageLoadingSpinner/ProductPageLoadingSpinner";
+import NoShoppingCart from "../../../public/images/shopping-cart.svg";
 
 interface ProductPageAddToCartButtonProps {
   isDisabled: boolean;
@@ -36,6 +37,8 @@ export const ProductPageAddToCartButton: React.FC<
       setAnimationState("idle");
     }
   };
+
+  const iconToShow = isDisabled ? NoShoppingCart : shoppingCartIcon;
 
   return (
     <>
@@ -127,7 +130,7 @@ export const ProductPageAddToCartButton: React.FC<
           <>
             <div className="transition-all duration-200">
               <Image
-                src={shoppingCartIcon}
+                src={iconToShow}
                 width={24}
                 height={24}
                 alt="Shopping Cart"

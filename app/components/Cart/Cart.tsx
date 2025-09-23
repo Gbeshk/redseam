@@ -71,6 +71,7 @@ export default function Cart({
             subtotal={getSubtotalPrice()}
             deliveryPrice={getDeliveryPrice()}
             total={getTotalPrice()}
+            onClose={onClose}
           />
         )}
       </div>

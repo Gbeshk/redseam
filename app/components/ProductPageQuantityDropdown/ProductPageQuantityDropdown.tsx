@@ -40,7 +40,7 @@ export const ProductPageQuantityDropdown: React.FC<
 
       {dropdownOpen && (
         <div className="absolute mt-1 w-full max-h-40 overflow-y-auto border border-[#E1DFE1] rounded-[10px] bg-white z-10 shadow-lg">
-          {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
+          {Array.from({ length: 255}, (_, i) => i + 1).map((num) => (
             <div
               key={num}
               onClick={() => {

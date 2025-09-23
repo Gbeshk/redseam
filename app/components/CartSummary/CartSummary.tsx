@@ -1,14 +1,19 @@
+import { useRouter } from "next/navigation";
+
 interface CartSummaryProps {
   subtotal: number;
   deliveryPrice: number;
   total: number;
+  onClose: () => void;
 }
 
 export default function CartSummary({
   subtotal,
   deliveryPrice,
   total,
+  onClose,
 }: CartSummaryProps) {
+  const router = useRouter();
   return (
     <div className="px-[40px] pt-[24px]">
       <div className="flex flex-col">
@@ -27,7 +32,13 @@ export default function CartSummary({
           </p>
         </div>
       </div>
-      <button className="mt-[98px] h-[59px] w-full bg-[#FF4000] text-white rounded-[10px] cursor-pointer font-medium text-[18px] hover:bg-[#E63600] transition-colors">
+      <button
+        onClick={() => {
+          router.push("/checkout");
+          onClose();
+        }}
+        className="mt-[98px] h-[59px] w-full bg-[#FF4000] text-white rounded-[10px] cursor-pointer font-medium text-[18px] hover:bg-[#E63600] transition-colors"
+      >
         Go to checkout
       </button>
     </div>

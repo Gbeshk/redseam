@@ -41,16 +41,15 @@ export const apiRequest = async (url: string, options: RequestInit = {}) => {
       try {
         const errorData = await response.json();
         errorMessage = errorData.message || errorData.error || errorMessage;
-      } catch {
-        // If we can't parse the error response, use the default message
-      }
+      } catch {}
 
       if (response.status === 401) {
         throw new AuthErrorClass("Authentication required. Please log in.");
       } else if (response.status === 403) {
         throw new AuthErrorClass("Access denied. You do not have permission.");
       } else if (response.status === 404) {
-        throw new NetworkErrorClass("Resource not found.", response.status);
+        // Return null for 404s instead of throwing error
+        return null;
       } else if (response.status >= 500) {
         throw new NetworkErrorClass(
           "Server error. Please try again later.",
