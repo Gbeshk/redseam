@@ -33,7 +33,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-[52px] flex flex-col gap-[24px]"
+      className="mt-[46px] flex flex-col gap-[24px]"
     >
       <SignUpFormInput
         type="text"
@@ -80,7 +80,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
       <button
         type="submit"
         disabled={isSubmitting}
-        className={`w-full h-[41px] mt-[28px] text-white text-[14px] cursor-pointer rounded-[10px] transition-all duration-200 ${
+        className={`w-full h-[41px] mt-[20px] text-white text-[14px] cursor-pointer rounded-[10px] transition-all duration-200 ${
           isSubmitting
             ? "bg-gray-400 cursor-not-allowed"
             : "bg-[#FF4000] hover:bg-[#e63900] hover:shadow-lg active:transform active:scale-95"

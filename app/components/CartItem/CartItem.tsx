@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface CartItemData {
   id: number;
@@ -21,9 +24,18 @@ export default function CartItem({
   onUpdateQuantity,
   onRemove,
 }: CartItemProps) {
+  const router = useRouter();
+
+  const handleRedirect = () => {
+    router.push(`/dashboard/products/${item.id}`);
+  };
+
   return (
-    <div className="flex">
-      <div className="w-[100px] h-[134px] bg-gray-200 rounded-[10px]  border-[1px] border-[#E1DFE1] flex items-center justify-center overflow-hidden">
+    <div className="flex gap-[16px]">
+      <div
+        className="w-[100px] h-[134px] bg-gray-200 rounded-[10px] border-[1px] border-[#E1DFE1] flex items-center justify-center overflow-hidden cursor-pointer"
+        onClick={handleRedirect}
+      >
         {item.cover_image ? (
           <Image
             src={item.cover_image}
@@ -36,17 +48,23 @@ export default function CartItem({
           <span className="text-xs text-gray-500">Image</span>
         )}
       </div>
-      <div className="h-[117px] my-auto ml-[16px] w-full flex flex-col justify-between">
-        <div className="flex justify-between items-center w-full">
-          <p className="font-medium text-[14px] w-[200px]  text-[#10151F] capitalize">
+
+      <div className="h-[117px] my-auto w-full flex flex-col justify-between">
+        <div
+          className="flex justify-between items-center w-full cursor-pointer"
+          onClick={handleRedirect}
+        >
+          <p className="font-medium text-[14px] w-[200px] text-[#10151F] capitalize">
             {item.name}
           </p>
-          <p className="font-medium text-[18px]  text-[#10151F] capitalize">
+          <p className="font-medium text-[18px] text-[#10151F] capitalize">
             $ {item.price.toFixed(2)}
           </p>
         </div>
+
         <p className="text-[#3E424A] font-normal text-[12px]">{item.color}</p>
         <p className="text-[#3E424A] font-normal text-[12px]">{item.size}</p>
+
         <div className="h-[26px] flex justify-between items-center">
           <div className="w-[70px] h-[26px] flex items-center justify-around rounded-[22px] border-[1px] border-[#E1DFE1]">
             <button
@@ -73,6 +91,7 @@ export default function CartItem({
               +
             </button>
           </div>
+
           <button
             className="text-[12px] text-[#3E424A] hover:underline cursor-pointer"
             onClick={() => onRemove(item.id)}

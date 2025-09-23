@@ -45,7 +45,7 @@ export const DashboardProductsPagination: React.FC<
   };
 
   return (
-    <div className="mt-[64px] flex justify-center">
+    <div className="mt-[92px] flex justify-center">
       <div className="flex gap-[8px] cursor-pointer items-center">
         <Image
           src={arrowDown}

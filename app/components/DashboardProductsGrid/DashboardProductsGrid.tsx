@@ -26,7 +26,7 @@ export const DashboardProductsGrid: React.FC<DashboardProductsGridProps> = ({
         </div>
       )}
       <div
-        className={`grid grid-cols-4 gap-[24px] mt-[32px] ${
+        className={`grid grid-cols-4 gap-x-[24px] gap-y-[48px] mt-[32px] ${
           isPaginationLoading ? "opacity-50" : ""
         }`}
       >

@@ -51,7 +51,7 @@ const SignUpAvatarUpload: React.FC<SignUpAvatarUploadProps> = ({
   }, [onAvatarChange]);
 
   return (
-    <div className="mt-[52px] flex items-center">
+    <div className="mt-[46px] flex items-center">
       <label
         htmlFor="signUpImageUpload"
         className="w-[100px] h-[100px] rounded-full border border-[#D1D5DB] flex items-center justify-center cursor-pointer transition-colors duration-300 ease-in-out hover:border-gray-500 hover:bg-gray-100"

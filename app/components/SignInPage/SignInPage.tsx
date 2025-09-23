@@ -15,7 +15,7 @@ export default function SignInPage() {
         height={1000}
         className="w-[948px] h-[1000px]"
       />
-      <div className="w-full justify-center flex items-center">
+      <div className="w-full justify-center flex items-center mr-[36px] mb-[124px] ">
         <div className="max-w-[554px] w-full">
           <p className="text-[#10151F] font-semibold text-[42px] mb-8">
             Log In

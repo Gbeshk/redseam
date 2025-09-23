@@ -211,7 +211,7 @@ export default function DashboardProductsPage() {
   }
 
   return (
-    <div className="max-w-[1720px] w-full mx-auto mt-[52px]">
+    <div className="max-w-[1720px] w-full mx-auto mt-[52px] pb-[224px]">
       <DashboardProductsHeader
         totalProducts={totalProducts}
         currentPage={currentPage}

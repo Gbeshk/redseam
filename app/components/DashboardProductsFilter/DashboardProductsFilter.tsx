@@ -89,7 +89,7 @@ export const DashboardProductsFilter: React.FC<
       <p className="text-[#10151F] text-[16px]">Filter</p>
       {isFilterOpen && (
         <div
-          className="absolute top-full mt-2 left-[-300px] bg-white w-[392px] border border-[#E1DFE1] h-[169px] p-[16px] rounded-[10px] shadow-lg z-20"
+          className="absolute top-full mt-2 left-[-304px] bg-white w-[392px] border border-[#E1DFE1] h-[169px] p-[16px] rounded-[10px] shadow-lg z-20"
           onClick={handleModalClick}
         >
           <div className="flex gap-4 flex-col">
