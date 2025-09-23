@@ -10,6 +10,7 @@ interface SignInInputProps {
   hasIcon?: boolean;
   icon?: React.ReactNode;
   onIconClick?: () => void;
+  required?: boolean;
 }
 
 const SignInInput: React.FC<SignInInputProps> = ({
@@ -22,7 +23,33 @@ const SignInInput: React.FC<SignInInputProps> = ({
   hasIcon = false,
   icon,
   onIconClick,
+  required = false,
 }) => {
+  const [hasAutoFill, setHasAutoFill] = React.useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    const checkAutoFill = () => {
+      if (inputRef.current) {
+        const domValue = inputRef.current.value;
+        const hasWebkitAutofill = inputRef.current.matches(":-webkit-autofill");
+        const hasDifferentValue = domValue !== value;
+        const hasDomValueWithoutReactValue = Boolean(domValue) && !value;
+
+        const isAutoFilled =
+          hasWebkitAutofill ||
+          hasDifferentValue ||
+          hasDomValueWithoutReactValue;
+        setHasAutoFill(isAutoFilled);
+      }
+    };
+
+    checkAutoFill();
+    const interval = setInterval(checkAutoFill, 100);
+
+    return () => clearInterval(interval);
+  }, [value]);
+
   const getInputClasses = () => {
     const baseClasses =
       "max-w-[552px] w-full h-[42px] rounded-[8px] border-[1px] p-[12px] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#FF4000] focus:ring-opacity-20 hover:border-[#FF4000] hover:border-opacity-50";
@@ -43,12 +70,13 @@ const SignInInput: React.FC<SignInInputProps> = ({
     <div>
       <div className="relative">
         <input
+          ref={inputRef}
           type={type}
           name={name}
           value={value}
           onChange={onChange}
           className={`${getInputClasses()} ${getPlaceholderClass()}`}
-          placeholder={placeholder}
+          placeholder={required ? "" : placeholder}
         />
         {hasIcon && icon && (
           <div
@@ -56,6 +84,13 @@ const SignInInput: React.FC<SignInInputProps> = ({
             onClick={onIconClick}
           >
             {icon}
+          </div>
+        )}
+        {!value && !hasAutoFill && required && (
+          <div className="absolute left-[12px] top-[50%] transform -translate-y-1/2 pointer-events-none z-10">
+            <span className="text-[#10151F] font-poppins font-normal text-[14px]">
+              {placeholder} <span className="text-[#FF4000]">*</span>
+            </span>
           </div>
         )}
       </div>

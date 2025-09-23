@@ -13,23 +13,14 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
   onTogglePassword,
   showPassword,
   showConfirmPassword,
-  showRequired,
 }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit(formData);
   };
 
-  const getPlaceholderText = (
-    fieldName: keyof typeof formData,
-    baseText: string
-  ) => {
-    const value = formData[fieldName];
-    const hasError =
-      showRequired && (!value || (typeof value === "string" && !value.trim()));
-    return hasError ? `${baseText} *` : baseText;
-  };
   const router = useRouter();
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -40,8 +31,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
         name="username"
         value={formData.username}
         onChange={onInputChange}
-        placeholder={getPlaceholderText("username", "Username")}
+        placeholder="Username"
         error={errors.username}
+        required={true}
       />
 
       <SignUpFormInput
@@ -49,8 +41,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
         name="email"
         value={formData.email}
         onChange={onInputChange}
-        placeholder={getPlaceholderText("email", "Email")}
+        placeholder="Email"
         error={errors.email}
+        required={true}
       />
 
       <SignUpFormInput
@@ -58,11 +51,12 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
         name="password"
         value={formData.password}
         onChange={onInputChange}
-        placeholder={getPlaceholderText("password", "Password")}
+        placeholder="Password"
         error={errors.password}
         hasIcon={true}
         icon={<SignUpPasswordIcon isVisible={showPassword} />}
         onIconClick={() => onTogglePassword("password")}
+        required={true}
       />
 
       <SignUpFormInput
@@ -70,11 +64,12 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
         name="confirmPassword"
         value={formData.confirmPassword}
         onChange={onInputChange}
-        placeholder={getPlaceholderText("confirmPassword", "Confirm Password")}
+        placeholder="Confirm Password"
         error={errors.confirmPassword}
         hasIcon={true}
         icon={<SignUpPasswordIcon isVisible={showConfirmPassword} />}
         onIconClick={() => onTogglePassword("confirmPassword")}
+        required={true}
       />
 
       <button

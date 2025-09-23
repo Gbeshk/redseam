@@ -167,6 +167,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ apiUrl }) => {
         onChange={handleInputChange}
         placeholder="Email"
         error={errors.email}
+        required={true}
       />
       <SignInInput
         type={showPassword ? "text" : "password"}
@@ -178,6 +179,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ apiUrl }) => {
         hasIcon
         icon={<EyeIcon />}
         onIconClick={togglePasswordVisibility}
+        required={true}
       />
       <button
         type="submit"

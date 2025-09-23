@@ -46,6 +46,7 @@ export default function CartContent({
     <div className="flex flex-col gap-[36px] ">
       {cartItems.map((item) => (
         <CartItem
+          onClose={onClose}
           key={item.id}
           item={item}
           onUpdateQuantity={onUpdateQuantity}

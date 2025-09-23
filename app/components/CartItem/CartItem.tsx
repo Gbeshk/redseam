@@ -23,10 +23,12 @@ export default function CartItem({
   item,
   onUpdateQuantity,
   onRemove,
-}: CartItemProps) {
+  onClose,
+}: CartItemProps & { onClose: () => void }) {
   const router = useRouter();
 
   const handleRedirect = () => {
+    if (onClose) onClose();
     router.push(`/dashboard/products/${item.id}`);
   };
 
