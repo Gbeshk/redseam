@@ -15,8 +15,8 @@ interface CartItemData {
 
 interface CartItemProps {
   item: CartItemData;
-  onUpdateQuantity: (id: number, quantity: number) => void;
-  onRemove: (id: number) => void;
+  onUpdateQuantity: (uniqueId: string, quantity: number) => void;
+  onRemove: (uniqueId: string) => void;
 }
 
 export default function CartItem({
@@ -31,6 +31,9 @@ export default function CartItem({
     if (onClose) onClose();
     router.push(`/dashboard/products/${item.id}`);
   };
+
+  // Create unique identifier for this cart item
+  const uniqueId = `${item.id}-${item.color || 'no-color'}-${item.size || 'no-size'}`;
 
   return (
     <div className="flex gap-[16px]">
@@ -70,7 +73,7 @@ export default function CartItem({
         <div className="h-[26px] flex justify-between items-center">
           <div className="w-[70px] h-[26px] flex items-center justify-around rounded-[22px] border-[1px] border-[#E1DFE1]">
             <button
-              onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
+              onClick={() => onUpdateQuantity(uniqueId, item.quantity - 1)}
               disabled={item.quantity <= 1}
               className={`w-[24px] h-[24px] rounded-full flex items-center justify-center transition-colors ${
                 item.quantity <= 1
@@ -87,7 +90,7 @@ export default function CartItem({
               {item.quantity}
             </span>
             <button
-              onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+              onClick={() => onUpdateQuantity(uniqueId, item.quantity + 1)}
               className="w-[24px] h-[24px] rounded-full flex items-center justify-center hover:bg-gray-100 cursor-pointer transition-colors"
             >
               +
@@ -96,7 +99,7 @@ export default function CartItem({
 
           <button
             className="text-[12px] text-[#3E424A] hover:underline cursor-pointer"
-            onClick={() => onRemove(item.id)}
+            onClick={() => onRemove(uniqueId)}
           >
             Remove
           </button>

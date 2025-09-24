@@ -17,8 +17,8 @@ interface CartContentProps {
   cartItems: CartItemData[];
   isLoading: boolean;
   error: string | null;
-  onUpdateQuantity: (id: number, quantity: number) => void;
-  onRemoveItem: (id: number) => void;
+  onUpdateQuantity: (uniqueId: string, quantity: number) => void;
+  onRemoveItem: (uniqueId: string) => void;
   onClose: () => void;
 }
 
@@ -42,12 +42,17 @@ export default function CartContent({
     return <EmptyCartState onClose={onClose} />;
   }
 
+  // Create unique key for each cart item
+  const createUniqueKey = (item: CartItemData) => {
+    return `${item.id}-${item.color || 'no-color'}-${item.size || 'no-size'}`;
+  };
+
   return (
     <div className="flex flex-col gap-[36px] ">
       {cartItems.map((item) => (
         <CartItem
           onClose={onClose}
-          key={item.id}
+          key={createUniqueKey(item)}
           item={item}
           onUpdateQuantity={onUpdateQuantity}
           onRemove={onRemoveItem}

@@ -25,8 +25,8 @@ interface CartContextType {
   error: string | null;
   fetchCart: () => Promise<void>;
   refreshCartCount: () => Promise<void>;
-  updateCartItem: (id: number, quantity: number) => Promise<void>;
-  removeCartItem: (id: number) => Promise<void>;
+  updateCartItem: (uniqueId: string, quantity: number) => Promise<void>;
+  removeCartItem: (uniqueId: string) => Promise<void>;
   addToCart: (
     productId: number,
     quantity: number,
@@ -45,6 +45,14 @@ function getCookie(name: string): string | null {
   if (parts.length === 2) return parts.pop()?.split(";").shift() ?? null;
   return null;
 }
+
+const parseUniqueId = (uniqueId: string) => {
+  const parts = uniqueId.split('-');
+  const productId = parseInt(parts[0]);
+  const color = parts[1] === 'no-color' ? undefined : parts[1];
+  const size = parts[2] === 'no-size' ? undefined : parts[2];
+  return { productId, color, size };
+};
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -110,69 +118,89 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const updateCartItem = useCallback(async (id: number, quantity: number) => {
+  const updateCartItem = useCallback(async (uniqueId: string, quantity: number) => {
     try {
       const token = getCookie("token");
       if (!token) throw new Error("Authentication token not found");
 
+      const { productId, color, size } = parseUniqueId(uniqueId);
+      const targetItem = cartItems.find(item => 
+        item.id === productId && 
+        item.color === (color || '') && 
+        item.size === (size || '')
+      );
+
+      if (!targetItem) throw new Error("Cart item not found");
+
       if (quantity === 0) {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/cart/products/${id}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/cart/products/${productId}`,
           {
             method: "DELETE",
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
+            body: JSON.stringify({ color, size }),
           }
         );
 
         if (!response.ok) throw new Error("Failed to remove item from cart");
-        setCartItems((prev) => prev.filter((item) => item.id !== id));
+        setCartItems((prev) => prev.filter((item) => {
+          const itemUniqueId = `${item.id}-${item.color || 'no-color'}-${item.size || 'no-size'}`;
+          return itemUniqueId !== uniqueId;
+        }));
       } else {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/cart/products/${id}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/cart/products/${productId}`,
           {
             method: "PATCH",
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ quantity }),
+            body: JSON.stringify({ quantity, color, size }),
           }
         );
 
         if (!response.ok) throw new Error("Failed to update cart item");
         setCartItems((prev) =>
-          prev.map((item) =>
-            item.id === id ? { ...item, quantity } : item
-          )
+          prev.map((item) => {
+            const itemUniqueId = `${item.id}-${item.color || 'no-color'}-${item.size || 'no-size'}`;
+            return itemUniqueId === uniqueId ? { ...item, quantity } : item;
+          })
         );
       }
     } catch (err) {
       console.error("Error updating cart:", err);
       throw err;
     }
-  }, []);
+  }, [cartItems]);
 
-  const removeCartItem = useCallback(async (id: number) => {
+  const removeCartItem = useCallback(async (uniqueId: string) => {
     try {
       const token = getCookie("token");
       if (!token) throw new Error("Authentication token not found");
 
+      const { productId, color, size } = parseUniqueId(uniqueId);
+
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/cart/products/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/cart/products/${productId}`,
         {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({ color, size }),
         }
       );
 
       if (!response.ok) throw new Error("Failed to remove item from cart");
-      setCartItems((prev) => prev.filter((item) => item.id !== id));
+      setCartItems((prev) => prev.filter((item) => {
+        const itemUniqueId = `${item.id}-${item.color || 'no-color'}-${item.size || 'no-size'}`;
+        return itemUniqueId !== uniqueId;
+      }));
     } catch (err) {
       console.error("Error removing item:", err);
       throw err;

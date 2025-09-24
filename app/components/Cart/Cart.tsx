@@ -18,8 +18,8 @@ interface CartProps {
   isLoading: boolean;
   error: string | null;
   onClose: () => void;
-  onUpdateQuantity: (id: number, quantity: number) => void;
-  onRemoveItem: (id: number) => void;
+  onUpdateQuantity: (uniqueId: string, quantity: number) => void;
+  onRemoveItem: (uniqueId: string) => void;
 }
 
 export default function Cart({

@@ -61,18 +61,20 @@ export default function HeaderProfile({ onArrowClick }: HeaderProfileProps) {
     setTimeout(() => setIsAnimating(false), 500);
   };
 
-  const updateQuantity = async (id: number, newQuantity: number) => {
+  // Updated to handle unique identifiers instead of just product IDs
+  const updateQuantity = async (uniqueId: string, newQuantity: number) => {
     if (newQuantity < 1) return;
     try {
-      await updateCartItem(id, newQuantity);
+      await updateCartItem(uniqueId, newQuantity);
     } catch (err) {
       console.error("Error updating cart:", err);
     }
   };
 
-  const removeItem = async (id: number) => {
+  // Updated to handle unique identifiers instead of just product IDs
+  const removeItem = async (uniqueId: string) => {
     try {
-      await removeCartItem(id);
+      await removeCartItem(uniqueId);
     } catch (err) {
       console.error("Error removing item:", err);
     }
