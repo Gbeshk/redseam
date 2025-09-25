@@ -7,7 +7,7 @@ export default function SignInPage() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
 
   return (
-    <div className="max-w-[1920px] w-full flex mx-auto">
+    <div className="w-[1920px]  flex mx-auto">
       <Image
         src={LoginPicture}
         alt="loginPic"
@@ -15,8 +15,8 @@ export default function SignInPage() {
         height={1000}
         className="w-[948px] h-[1000px]"
       />
-      <div className="w-full justify-center flex items-center mr-[36px] mb-[124px] ">
-        <div className="max-w-[554px] w-full">
+      <div className="w-full justify-center flex mt-[241px] mr-[36px]  ">
+        <div className="w-[554px] ">
           <p className="text-[#10151F] font-semibold text-[42px] mb-8">
             Log In
           </p>

@@ -55,7 +55,7 @@ export const ProductPageDetails: React.FC<ProductPageDetailsProps> = ({
     product.description && product.description.trim() !== "";
 
   return (
-    <div className="w-full max-w-[704px]">
+    <div className=" w-[704px]">
       <h1 className="font-semibold text-[32px] leading-[100%] h-[48px] tracking-[0%] text-[#10151F] capitalize">
         {product.name}
       </h1>

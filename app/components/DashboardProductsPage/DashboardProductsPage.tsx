@@ -160,12 +160,7 @@ export default function DashboardProductsPage() {
 
   useEffect(() => {
     if (isInitialized && isAuthChecked) {
-      fetchProducts(
-        currentPage,
-        appliedPriceFrom,
-        appliedPriceTo,
-        sortBy
-      );
+      fetchProducts(currentPage, appliedPriceFrom, appliedPriceTo, sortBy);
     }
   }, [
     currentPage,
@@ -200,7 +195,7 @@ export default function DashboardProductsPage() {
 
   if (!isAuthChecked) {
     return (
-      <div className="max-w-[1720px] w-full mx-auto mt-[52px] flex justify-center items-center h-[400px]">
+      <div className="w-[1720px]  mx-auto mt-[52px] flex justify-center items-center h-[400px]">
         <Spinner />
       </div>
     );
@@ -211,7 +206,7 @@ export default function DashboardProductsPage() {
   }
 
   return (
-    <div className="max-w-[1720px] w-full mx-auto mt-[52px] pb-[224px]">
+    <div className="w-[1920px] px-[100px] mx-auto mt-[52px] pb-[224px]">
       <DashboardProductsHeader
         totalProducts={totalProducts}
         currentPage={currentPage}

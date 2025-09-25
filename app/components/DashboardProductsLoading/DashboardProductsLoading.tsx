@@ -3,7 +3,7 @@ import { DashboardProductSkeleton } from "../DashboardProductSkeleton/DashboardP
 
 export const DashboardProductsLoading: React.FC = () => {
   return (
-    <div className="max-w-[1720px] w-full mx-auto mt-[52px]">
+    <div className="w-[1720px] mx-auto mt-[52px]">
       <div className="flex items-center justify-between mb-8">
         <div className="h-[42px] w-48 bg-gray-200 rounded animate-pulse"></div>
         <div className="flex gap-[32px] items-center">

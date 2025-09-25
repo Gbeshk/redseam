@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Envelope from "../../../public/images/envelope.svg";
+import XMark from "../../../public/images/x-mark.svg";
+import DoneIcon from "../../../public/images/Frame 69.svg";
 import { useCart } from "@/app/components/contexts/CartContext";
 
 interface CartItem {
@@ -31,6 +33,15 @@ interface FormErrors {
   zipCode?: string;
 }
 
+interface UserData {
+  id: number;
+  username: string;
+  email: string;
+  is_admin: number;
+  remember_token: string | null;
+  avatar: string | null;
+}
+
 function Checkoutpage() {
   const [emailValue, setEmailValue] = useState<string>("");
   const [formData, setFormData] = useState<FormData>({
@@ -44,12 +55,37 @@ function Checkoutpage() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>("");
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
+  const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
 
   const { cartItems, isLoading, error, updateCartItem, removeCartItem } =
     useCart();
   const router = useRouter();
 
+  const getUserFromCookies = (): UserData | null => {
+    if (typeof document !== "undefined") {
+      const cookies = document.cookie.split(";");
+      for (const cookie of cookies) {
+        const [name, value] = cookie.trim().split("=");
+        if (name === "user") {
+          try {
+            return JSON.parse(decodeURIComponent(value));
+          } catch (error) {
+            console.error("Error parsing user cookie:", error);
+            return null;
+          }
+        }
+      }
+    }
+    return null;
+  };
+
   useEffect(() => {
+    const userData = getUserFromCookies();
+    if (userData?.email) {
+      setEmailValue(userData.email);
+      setFormData((prev) => ({ ...prev, email: userData.email }));
+    }
+
     const timer = setTimeout(() => {
       setIsInitialLoad(false);
     }, 1000);
@@ -93,7 +129,7 @@ function Checkoutpage() {
 
     if (!formData.zipCode.trim()) {
       errors.zipCode = "Zip code is required";
-    } else if (!/^\d{5}(-\d{4})?$/.test(formData.zipCode.trim())) {
+    } else if (!/^\d+$/.test(formData.zipCode.trim())) {
       errors.zipCode = "Please enter a valid zip code";
     }
 
@@ -151,7 +187,7 @@ function Checkoutpage() {
       );
 
       if (response.status === 200) {
-        router.push("/success");
+        setShowSuccessModal(true);
       } else if (
         response.status === 307 ||
         response.status === 301 ||
@@ -174,6 +210,11 @@ function Checkoutpage() {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleCloseModal = () => {
+    setShowSuccessModal(false);
+    router.push("/dashboard");
   };
 
   const getSubtotalPrice = (): number => {
@@ -353,7 +394,7 @@ function Checkoutpage() {
     }
 
     return (
-      <div className="flex flex-col gap-[36px] max-h-[385px] overflow-y-auto cart-scroll px-[20px] py-[20px]">
+      <div className="flex flex-col gap-[36px] max-h-[385px] overflow-y-auto cart-scroll">
         {cartItems.map(renderCartItem)}
       </div>
     );
@@ -361,16 +402,16 @@ function Checkoutpage() {
 
   return (
     <>
-      <div className="max-w-[1720px] w-full mx-auto mt-[52px] pb-[224px]">
+      <div className="w-[1720px] mx-auto mt-[52px] pb-[224px]">
         <h1 className="text-[#10151F] font-semibold text-[42px] h-[64px]">
           Checkout
         </h1>
         <div className="mt-[36px] flex gap-[24px] justify-between">
-          <div className="max-w-[1129px] w-full h-[635px] bg-[#F8F6F7] rounded-[16px] px-[46px] py-[72px]">
+          <div className="w-[1129px]  h-[635px] bg-[#F8F6F7] rounded-[16px] px-[46px] py-[72px]">
             <p className="text-[#3E424A] font-medium text-[22px] leading-[100%] tracking-[0]">
               Order details
             </p>
-            <form className="mt-[52px] max-w-[578px] w-full flex flex-col gap-[32px]">
+            <form className="mt-[52px] w-[578px] flex flex-col gap-[32px]">
               <div className="flex w-full justify-between">
                 <div className="w-[277px]">
                   <input
@@ -409,23 +450,19 @@ function Checkoutpage() {
               </div>
               <div className="w-full">
                 <div className="relative w-full">
-                  {!emailValue && (
-                    <div className="absolute left-[12px] top-1/2 transform -translate-y-1/2 pointer-events-none">
-                      <Image
-                        src={Envelope}
-                        width={20}
-                        height={20}
-                        alt="envelope"
-                      />
-                    </div>
-                  )}
+                  <div className="absolute left-[12px] top-1/2 transform -translate-y-1/2 pointer-events-none">
+                    <Image
+                      src={Envelope}
+                      width={20}
+                      height={20}
+                      alt="envelope"
+                    />
+                  </div>
                   <input
                     type="email"
                     value={emailValue}
                     onChange={(e) => handleInputChange("email", e.target.value)}
-                    className={`w-full h-[42px] bg-white border rounded-[8px] ${
-                      emailValue ? "px-[12px]" : "pl-[36px] pr-[12px]"
-                    } placeholder:font-poppins placeholder:font-normal placeholder:text-[14px] placeholder:leading-[100%] placeholder:tracking-[0] placeholder:text-[#3E424A] ${
+                    className={`w-full h-[42px] bg-white border rounded-[8px] pl-[36px] pr-[12px] placeholder:font-poppins placeholder:font-normal placeholder:text-[14px] placeholder:leading-[100%] placeholder:tracking-[0] placeholder:text-[#3E424A] ${
                       formErrors.email ? "border-red-500" : "border-[#E1DFE1]"
                     }`}
                     placeholder="Email"
@@ -479,7 +516,7 @@ function Checkoutpage() {
           </div>
 
           <div className="w-[460px] flex flex-col h-[635px]">
-            <div className="flex-1 bg-white rounded-[16px] h-[635px] overflow-hidden">
+            <div className="flex-1 bg-white h-[635px] overflow-hidden">
               {renderCartContent()}
             </div>
 
@@ -556,6 +593,71 @@ function Checkoutpage() {
           </div>
         </div>
       </div>
+
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center animate-fadeIn">
+          <div className="absolute inset-0 bg-[#10151F] opacity-30 backdrop-blur-sm"></div>
+          <div className="relative h-[590px] w-[876px] bg-white p-[30px] animate-scaleIn">
+            <Image
+              src={XMark}
+              alt="x"
+              width={40}
+              height={40}
+              className="absolute top-[30px] right-[30px] cursor-pointer"
+              onClick={handleCloseModal}
+            />
+            <Image
+              src={DoneIcon}
+              alt="doneIcon"
+              width={76}
+              height={76}
+              className="mx-auto mt-[84px]"
+            />
+            <h1 className="mt-[40px] text-[#10151F] font-semibold text-[42px] leading-[100%] tracking-[0%] text-center">
+              Congrats
+            </h1>
+            <p className="text-[#3E424A] text-center mt-[24px] font-normal text-[14px] leading-[100%] tracking-[0%]">
+              Your order is placed successfully!
+            </p>
+            <button
+              onClick={handleCloseModal}
+              className="mt-[76px] rounded-[10px] text-white font-normal text-[14px] leading-[100%] tracking-[0%] cursor-pointer w-[214px] h-[41px] bg-[#FF4000] block mx-auto"
+            >
+              Continue shopping
+            </button>
+          </div>
+        </div>
+      )}
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes scaleIn {
+          from {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out;
+        }
+
+        .animate-scaleIn {
+          animation: scaleIn 0.3s ease-out;
+        }
+      `}</style>
     </>
   );
 }

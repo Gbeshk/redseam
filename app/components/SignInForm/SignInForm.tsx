@@ -184,7 +184,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ apiUrl }) => {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="max-w-[552px] cursor-pointer mt-[28px] w-full h-[42px] bg-[#FF4000] text-white rounded-[8px] font-poppins font-semibold text-[14px] hover:bg-[#e63900] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-[552px] cursor-pointer mt-[28px]  h-[42px] bg-[#FF4000] text-white rounded-[8px] font-poppins font-semibold text-[14px] hover:bg-[#e63900] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isSubmitting ? "Logging In..." : "Log In"}
       </button>

@@ -66,7 +66,7 @@ export default function Header() {
 
   if (isLoading) {
     return (
-      <div className="max-w-[1920px] w-full h-[80px] px-[100px] flex items-center justify-between mx-auto">
+      <div className="w-[1920px]  h-[80px] px-[100px] flex items-center justify-between mx-auto">
         <HeaderLogo />
         <div className="w-[100px] h-[40px]"></div>
       </div>
@@ -74,7 +74,7 @@ export default function Header() {
   }
 
   return (
-    <div className="max-w-[1920px] w-full h-[80px] px-[100px] flex items-center justify-between mx-auto">
+    <div className="w-[1920px]  h-[80px] px-[100px] flex items-center justify-between mx-auto">
       <HeaderLogo />
       {!isLoggedIn && <HeaderLogin />}
       {isLoggedIn && (

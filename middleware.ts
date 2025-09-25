@@ -1,4 +1,3 @@
-// middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -10,7 +9,12 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
-  if (!token && pathname.startsWith("/dashboard")) {
+  if (
+    !token &&
+    (pathname.startsWith("/dashboard") ||
+      pathname.startsWith("/checkout") ||
+      pathname.startsWith("/success"))
+  ) {
     return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
@@ -24,5 +28,12 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/sign-in", "/sign-up", "/dashboard/:path*"],
+  matcher: [
+    "/",
+    "/sign-in",
+    "/sign-up",
+    "/dashboard/:path*",
+    "/checkout/:path*",
+    "/success/:path*",
+  ],
 };

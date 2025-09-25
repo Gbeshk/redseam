@@ -183,7 +183,7 @@ function ProductPage() {
   if (notFound) {
     return (
       <ProductPageErrorBoundary>
-        <div className="max-w-[1720px] w-full mx-auto mt-[52px] px-4">
+        <div className="w-[1720px] mx-auto mt-[52px] px-4">
           <ProductPageBreadcrumb />
           <ProductPageNotFound productId={params.id as string} />
         </div>
@@ -200,7 +200,7 @@ function ProductPage() {
   if (!product) {
     return (
       <ProductPageErrorBoundary>
-        <div className="max-w-[1720px] w-full mx-auto mt-[52px] px-4">
+        <div className="w-[1720px]  mx-auto mt-[52px] px-4">
           <ProductPageBreadcrumb />
           <ProductPageNotFound productId={params.id as string} />
         </div>
@@ -210,10 +210,10 @@ function ProductPage() {
 
   return (
     <ProductPageErrorBoundary>
-      <div className="max-w-[1720px] w-full mx-auto mt-[52px] px-4">
+      <div className="w-[1920px] mx-auto mt-[52px] px-[100px]">
         <ProductPageBreadcrumb />
 
-        <div className="mt-[51px] flex justify-between gap-8 flex-wrap lg:flex-nowrap">
+        <div className="mt-[51px] flex justify-between">
           <ProductPageImageGallery
             product={product}
             selectedImage={selectedImage}

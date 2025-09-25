@@ -52,7 +52,7 @@ const SignInInput: React.FC<SignInInputProps> = ({
 
   const getInputClasses = () => {
     const baseClasses =
-      "max-w-[552px] w-full h-[42px] rounded-[8px] border-[1px] p-[12px] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#FF4000] focus:ring-opacity-20 hover:border-[#FF4000] hover:border-opacity-50";
+      "w-[552px]  h-[42px] rounded-[8px] border-[1px] p-[12px] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#FF4000] focus:ring-opacity-20 hover:border-[#FF4000] hover:border-opacity-50";
     const errorClasses = error
       ? "border-red-500 bg-red-50"
       : "border-[#E1DFE1]";

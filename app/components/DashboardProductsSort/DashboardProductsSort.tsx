@@ -19,6 +19,9 @@ export const DashboardProductsSort: React.FC<DashboardProductsSortProps> = ({
 
   const getSortDisplayText = (sortParam: string): string => {
     switch (sortParam) {
+      case "":
+      case "default":
+        return "Sort by";
       case "-created_at":
         return "New products first";
       case "price":
@@ -72,13 +75,19 @@ export const DashboardProductsSort: React.FC<DashboardProductsSortProps> = ({
       )}
       {isSortOpen && (
         <div
-          className="absolute top-full mt-2 left-[-56px] bg-white w-[223px] border border-[#E1DFE1] h-[184px] p-[16px] rounded-[10px] shadow-lg z-20"
+          className="absolute top-full mt-2 left-[-56px] bg-white w-[223px] border border-[#E1DFE1] h-[224px] p-[16px] rounded-[10px] shadow-lg z-20"
           onClick={handleModalClick}
         >
           <div className="flex flex-col">
             <p className="text-[#10151F] font-semibold text-[16px]">Sort by</p>
             <button
               className="text-[#10151F] cursor-pointer h-[40px] mt-[8px] text-[16px] font-poppins font-normal text-left hover:text-[#FF4000]"
+              onClick={() => handleSortSelect("")}
+            >
+              Default
+            </button>
+            <button
+              className="text-[#10151F] cursor-pointer h-[40px] text-[16px] font-poppins font-normal text-left hover:text-[#FF4000]"
               onClick={() => handleSortSelect("-created_at")}
             >
               New products first
