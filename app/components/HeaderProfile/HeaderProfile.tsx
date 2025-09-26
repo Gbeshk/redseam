@@ -61,7 +61,6 @@ export default function HeaderProfile({ onArrowClick }: HeaderProfileProps) {
     setTimeout(() => setIsAnimating(false), 500);
   };
 
-  // Updated to handle unique identifiers instead of just product IDs
   const updateQuantity = async (uniqueId: string, newQuantity: number) => {
     if (newQuantity < 1) return;
     try {
@@ -71,7 +70,6 @@ export default function HeaderProfile({ onArrowClick }: HeaderProfileProps) {
     }
   };
 
-  // Updated to handle unique identifiers instead of just product IDs
   const removeItem = async (uniqueId: string) => {
     try {
       await removeCartItem(uniqueId);

@@ -33,6 +33,7 @@ interface CartContextType {
     color?: string,
     size?: string
   ) => Promise<void>;
+  clearCart: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -240,6 +241,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     [refreshCartCount]
   );
 
+  const clearCart = useCallback(() => {
+    setCartItems([]);
+  }, []);
+
   useEffect(() => {
     refreshCartCount();
   }, [refreshCartCount]);
@@ -256,6 +261,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     updateCartItem,
     removeCartItem,
     addToCart,
+    clearCart,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

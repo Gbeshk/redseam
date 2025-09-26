@@ -55,7 +55,7 @@ function CheckoutPage() {
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
 
-  const { cartItems, isLoading, error } = useCart();
+  const { cartItems, isLoading, error, clearCart } = useCart();
   const router = useRouter();
 
   const getUserFromCookies = (): UserData | null => {
@@ -184,6 +184,7 @@ function CheckoutPage() {
       );
 
       if (response.status === 200) {
+        clearCart();
         setShowSuccessModal(true);
       } else if (
         response.status === 307 ||
