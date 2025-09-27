@@ -3,7 +3,6 @@ import { useEffect, useState, useCallback } from "react";
 import HeaderLogo from "../HeaderLogo/HeaderLogo";
 import HeaderLogin from "../HeaderLogin/HeaderLogin";
 import HeaderProfile from "../HeaderProfile/HeaderProfile";
-import { useRouter } from "next/navigation";
 
 const getCookie = (name: string): string | null => {
   if (typeof document === "undefined") return null;
@@ -28,7 +27,6 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const router = useRouter();
 
   const checkAuthStatus = useCallback(() => {
     const authStatus = isAuthenticated();
@@ -61,7 +59,6 @@ export default function Header() {
     clearCookies();
     setIsModalOpen(false);
     setIsLoggedIn(false);
-    router.push("/sign-in");
   };
 
   if (isLoading) {
