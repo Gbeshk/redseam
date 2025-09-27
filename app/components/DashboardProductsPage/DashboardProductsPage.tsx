@@ -25,11 +25,6 @@ const getCookie = (name: string): string | null => {
   return null;
 };
 
-const isAuthenticated = (): boolean => {
-  const token = getCookie("token");
-  return token !== null && token.trim() !== "";
-};
-
 export default function DashboardProductsPage() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
@@ -47,10 +42,6 @@ export default function DashboardProductsPage() {
 
   useEffect(() => {
     const checkAuth = () => {
-      if (!isAuthenticated()) {
-        router.push("/sign-in");
-        return;
-      }
       setIsAuthChecked(true);
     };
     checkAuth();
@@ -102,10 +93,6 @@ export default function DashboardProductsPage() {
         }
 
         const token = getCookie("token");
-        if (!token) {
-          router.push("/sign-in");
-          return;
-        }
 
         let url = `${API_URL}/products?page=${page}&per_page=${PER_PAGE}`;
         if (minPrice && minPrice.trim() !== "")

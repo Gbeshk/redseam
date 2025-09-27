@@ -2,6 +2,8 @@
 
 import React, { useState, useRef } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 import { ProductPageLoadingSpinner } from "../ProductPageLoadingSpinner/ProductPageLoadingSpinner";
 import NoShoppingCart from "../../../public/images/shopping-cart.svg";
 
@@ -19,16 +21,23 @@ export const ProductPageAddToCartButton: React.FC<
     "idle" | "loading" | "success"
   >("idle");
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const router = useRouter();
 
   const handleClick = async () => {
     if (isDisabled || animationState !== "idle") return;
+
+    const token = Cookies.get("token");
+    if (!token) {
+      router.push("/sign-in");
+      return;
+    }
 
     setAnimationState("loading");
 
     try {
       await onClick();
       setAnimationState("success");
-      
+
       setTimeout(() => {
         setAnimationState("idle");
       }, 2000);
@@ -63,7 +72,8 @@ export const ProductPageAddToCartButton: React.FC<
         }
 
         @keyframes gentlePulse {
-          0%, 100% {
+          0%,
+          100% {
             transform: scale(1);
           }
           50% {
@@ -97,9 +107,7 @@ export const ProductPageAddToCartButton: React.FC<
         {animationState === "loading" && (
           <div className="flex items-center gap-3 slide-up">
             <ProductPageLoadingSpinner size="small" />
-            <span className="text-white font-medium">
-              Adding...
-            </span>
+            <span className="text-white font-medium">Adding...</span>
           </div>
         )}
 
@@ -121,9 +129,7 @@ export const ProductPageAddToCartButton: React.FC<
                 }}
               />
             </svg>
-            <span className="text-white font-semibold">
-              Added to Cart
-            </span>
+            <span className="text-white font-semibold">Added to Cart</span>
           </div>
         )}
 
@@ -134,7 +140,9 @@ export const ProductPageAddToCartButton: React.FC<
               width={24}
               height={24}
               alt="Shopping Cart"
-              className={`transition-opacity duration-200 ${isDisabled ? "opacity-50" : ""}`}
+              className={`transition-opacity duration-200 ${
+                isDisabled ? "opacity-50" : ""
+              }`}
             />
             <span
               className={`text-[18px] leading-[100%] tracking-[0%] font-medium mt-[1.5px] transition-colors duration-200 ${

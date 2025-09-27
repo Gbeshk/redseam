@@ -17,11 +17,13 @@ import { ProductPageBreadcrumb } from "../ProductPageBreadcrumb/ProductPageBread
 import { ProductPageImageGallery } from "../ProductPageImageGallery/ProductPageImageGallery";
 import { ProductPageDetails } from "../ProductPageDetails/ProductPageDetails";
 import { ProductPageNotFound } from "../ProductPageNotFound/ProductPageNotFound";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 function ProductPage() {
   const params = useParams();
   const { addToCart } = useCart();
-
+  const router = useRouter();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<ApiError | null>(null);
@@ -152,6 +154,13 @@ function ProductPage() {
   const handleAddToCart = useCallback(async () => {
     if (!product || isAddingToCart) return;
 
+    // Check if user is authenticated
+    const token = Cookies.get("token");
+    if (!token) {
+      router.push("/sign-in");
+      return;
+    }
+
     const hasColors =
       product.available_colors && product.available_colors.length > 0;
 
@@ -171,10 +180,11 @@ function ProductPage() {
     }
   }, [
     product,
+    isAddingToCart,
+    selectedQuantity,
     selectedColor,
     selectedSize,
-    selectedQuantity,
-    isAddingToCart,
+    router,
     addToCart,
   ]);
 

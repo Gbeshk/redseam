@@ -5,35 +5,13 @@ export function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
   const { pathname } = req.nextUrl;
 
-  if (token && ["/sign-in", "/sign-up"].includes(pathname)) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
-  }
-
-  if (
-    !token &&
-    (pathname.startsWith("/dashboard") ||
-      pathname.startsWith("/checkout") ||
-      pathname.startsWith("/success"))
-  ) {
+  if (!token && pathname.startsWith("/checkout")) {
     return NextResponse.redirect(new URL("/sign-in", req.url));
-  }
-
-  if (pathname === "/") {
-    return token
-      ? NextResponse.redirect(new URL("/dashboard", req.url))
-      : NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/",
-    "/sign-in",
-    "/sign-up",
-    "/dashboard/:path*",
-    "/checkout/:path*",
-    "/success/:path*",
-  ],
+  matcher: ["/checkout/:path*"],
 };
