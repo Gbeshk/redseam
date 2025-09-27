@@ -1,17 +1,8 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import Image from "next/image";
 import LoginPicture from "../../../public/images/login-picture.png";
 import SignInForm from "../SignInForm/SignInForm";
 
 export default async function SignInPage() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token");
-
-  if (token) {
-    redirect("/dashboard");
-  }
-
   const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
 
   return (
