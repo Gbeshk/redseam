@@ -28,21 +28,37 @@ export const DashboardProductsPagination: React.FC<
 
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
-    if (totalPages <= 4) {
-      for (let i = 1; i <= totalPages; i++) pages.push(i);
-    } else {
-      if (currentPage === 1)
-        pages.push(1, 2, "...", totalPages - 1, totalPages);
-      else if (currentPage === 2) pages.push(1, 2, 3, "...", totalPages);
-      else if (currentPage === totalPages)
-        pages.push(1, "...", totalPages - 1, totalPages);
-      else if (currentPage === totalPages - 1)
-        pages.push(1, "...", totalPages - 2, totalPages - 1, totalPages);
-      else if (currentPage === totalPages - 2)
-        pages.push(1, "...", currentPage, currentPage + 1, totalPages);
-      else
-        pages.push(1, "...", currentPage, currentPage + 1, "...", totalPages);
+
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+      return pages;
     }
+
+    pages.push(1);
+
+    if (currentPage > 3) {
+      pages.push("...");
+    }
+
+    const start = Math.max(2, currentPage - 1);
+    const end = Math.min(totalPages - 1, currentPage + 1);
+
+    for (let i = start; i <= end; i++) {
+      if (!pages.includes(i)) {
+        pages.push(i);
+      }
+    }
+
+    if (currentPage < totalPages - 2) {
+      pages.push("...");
+    }
+
+    if (!pages.includes(totalPages)) {
+      pages.push(totalPages);
+    }
+
     return pages;
   };
 

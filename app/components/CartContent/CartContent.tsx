@@ -11,8 +11,9 @@ interface CartItemData {
   color?: string;
   size?: string;
   cover_image?: string;
+  images?: string[];
+  available_colors?: string[];
 }
-
 interface CartContentProps {
   cartItems: CartItemData[];
   isLoading: boolean;
@@ -42,9 +43,8 @@ export default function CartContent({
     return <EmptyCartState onClose={onClose} />;
   }
 
-  // Create unique key for each cart item
   const createUniqueKey = (item: CartItemData) => {
-    return `${item.id}-${item.color || 'no-color'}-${item.size || 'no-size'}`;
+    return `${item.id}-${item.color || "no-color"}-${item.size || "no-size"}`;
   };
 
   return (

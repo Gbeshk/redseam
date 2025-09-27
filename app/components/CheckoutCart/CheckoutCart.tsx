@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/app/components/contexts/CartContext";
+import EmptyCartState from "../EmptyCartState/EmptyCartState";
 
 interface CartItem {
   id: number;
@@ -11,6 +12,8 @@ interface CartItem {
   color: string;
   size: string;
   quantity: number;
+  images?: string[];
+  available_colors?: string[];
 }
 
 interface CheckoutCartProps {
@@ -45,6 +48,22 @@ function CheckoutCart({
     return `${item.id}-${item.color || "no-color"}-${item.size || "no-size"}`;
   };
 
+  const getImageForColor = (item: CartItem) => {
+    if (!item.color || !item.available_colors || !item.images) {
+      return item.cover_image;
+    }
+
+    const colorIndex = item.available_colors.findIndex(
+      (color) => color.toLowerCase() === item.color?.toLowerCase()
+    );
+
+    if (colorIndex !== -1 && item.images[colorIndex]) {
+      return item.images[colorIndex];
+    }
+
+    return item.cover_image;
+  };
+
   const handleUpdateQuantity = async (
     uniqueId: string,
     quantity: number
@@ -70,6 +89,7 @@ function CheckoutCart({
 
   const renderCartItem = (item: CartItem) => {
     const uniqueKey = createUniqueId(item);
+    const displayImage = getImageForColor(item);
 
     return (
       <div key={uniqueKey} className="flex gap-[16px]">
@@ -77,10 +97,10 @@ function CheckoutCart({
           className="w-[100px] h-[134px] bg-gray-200 rounded-[10px] border-[1px] border-[#E1DFE1] flex items-center justify-center overflow-hidden cursor-pointer"
           onClick={() => handleRedirect(item.id)}
         >
-          {item.cover_image ? (
+          {displayImage ? (
             <Image
-              src={item.cover_image}
-              alt={item.name}
+              src={displayImage}
+              alt={`${item.name} - ${item.color || "default"}`}
               width={100}
               height={134}
               className="w-full h-full object-cover"
@@ -177,23 +197,8 @@ function CheckoutCart({
 
     if (cartItems.length === 0) {
       return (
-        <div className="flex flex-col items-center justify-center py-[80px] space-y-4">
-          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
-            <svg
-              className="w-8 h-8 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-              />
-            </svg>
-          </div>
-          <p className="text-[#3E424A] text-[16px]">Your cart is empty</p>
+        <div>
+          <EmptyCartState />
         </div>
       );
     }

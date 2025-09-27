@@ -11,6 +11,8 @@ interface CartItemData {
   color?: string;
   size?: string;
   cover_image?: string;
+  images?: string[];
+  available_colors?: string[];
 }
 
 interface CartItemProps {
@@ -32,8 +34,27 @@ export default function CartItem({
     router.push(`/dashboard/products/${item.id}`);
   };
 
-  // Create unique identifier for this cart item
-  const uniqueId = `${item.id}-${item.color || 'no-color'}-${item.size || 'no-size'}`;
+  const uniqueId = `${item.id}-${item.color || "no-color"}-${
+    item.size || "no-size"
+  }`;
+
+  const getImageForColor = () => {
+    if (!item.color || !item.available_colors || !item.images) {
+      return item.cover_image;
+    }
+
+    const colorIndex = item.available_colors.findIndex(
+      (color) => color.toLowerCase() === item.color?.toLowerCase()
+    );
+
+    if (colorIndex !== -1 && item.images[colorIndex]) {
+      return item.images[colorIndex];
+    }
+
+    return item.cover_image;
+  };
+
+  const displayImage = getImageForColor();
 
   return (
     <div className="flex gap-[16px]">
@@ -41,10 +62,10 @@ export default function CartItem({
         className="w-[100px] h-[134px] bg-gray-200 rounded-[10px] border-[1px] border-[#E1DFE1] flex items-center justify-center overflow-hidden cursor-pointer"
         onClick={handleRedirect}
       >
-        {item.cover_image ? (
+        {displayImage ? (
           <Image
-            src={item.cover_image}
-            alt={item.name}
+            src={displayImage}
+            alt={`${item.name} - ${item.color || "default"}`}
             width={100}
             height={134}
             className="w-full h-full object-cover"
