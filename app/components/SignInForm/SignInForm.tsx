@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import SignInMessage from "../SignInMessage/SignInMessage";
 import SignInInput from "../SignInInput/SignInInput";
 
@@ -27,6 +27,7 @@ const setCookie = (name: string, value: string, days: number = 7) => {
 
 const SignInForm: React.FC<SignInFormProps> = ({ apiUrl }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [formData, setFormData] = useState<FormData>({
     email: "",
@@ -36,6 +37,20 @@ const SignInForm: React.FC<SignInFormProps> = ({ apiUrl }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
+  const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
+
+  // Get redirect URL from query parameters on component mount
+  useEffect(() => {
+    const redirect = searchParams.get("redirect");
+    if (redirect) {
+      try {
+        const decodedUrl = decodeURIComponent(redirect);
+        setRedirectUrl(decodedUrl);
+      } catch (error) {
+        console.error("Error decoding redirect URL:", error);
+      }
+    }
+  }, [searchParams]);
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
@@ -83,7 +98,17 @@ const SignInForm: React.FC<SignInFormProps> = ({ apiUrl }) => {
         if (result.user) setCookie("user", JSON.stringify(result.user), 7);
         setFormData({ email: "", password: "" });
 
-        setTimeout(() => router.push("/dashboard"), 1000);
+        // Handle redirect
+        setTimeout(() => {
+          const urlToRedirect = redirectUrl || "/dashboard";
+          
+          // If redirecting to a product page, use window.location for full URL
+          if (redirectUrl && redirectUrl.startsWith("http")) {
+            window.location.href = redirectUrl;
+          } else {
+            router.push(urlToRedirect);
+          }
+        }, 1000);
       } else {
         if (response.status === 401 || response.status === 405) {
           setMessage("Email or password is incorrect. Please try again.");

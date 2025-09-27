@@ -28,7 +28,9 @@ export const ProductPageAddToCartButton: React.FC<
 
     const token = Cookies.get("token");
     if (!token) {
-      router.push("/sign-in");
+      // Pass current URL as query parameter to sign-in page
+      const currentUrl = encodeURIComponent(window.location.href);
+      router.push(`/sign-in?redirect=${currentUrl}`);
       return;
     }
 

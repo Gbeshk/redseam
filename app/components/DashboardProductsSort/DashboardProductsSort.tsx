@@ -75,7 +75,7 @@ export const DashboardProductsSort: React.FC<DashboardProductsSortProps> = ({
       )}
       {isSortOpen && (
         <div
-          className="absolute top-full mt-2 left-[-56px] bg-white w-[223px] border border-[#E1DFE1] h-[224px] p-[16px] rounded-[10px] shadow-lg z-20"
+          className="absolute top-full mt-2 right-[-0] bg-white w-[223px] border border-[#E1DFE1] h-[224px] p-[16px] rounded-[10px] shadow-lg z-20"
           onClick={handleModalClick}
         >
           <div className="flex flex-col">

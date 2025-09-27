@@ -6,6 +6,6 @@ export const ProductPageBreadcrumb: React.FC = () => (
     <Link href="/dashboard" className="hover:underline cursor-pointer">
       Listing
     </Link>{" "}
-    / <span className="hover:underline cursor-pointer">Product</span>
+    / <span className="">Product</span>
   </nav>
 );
