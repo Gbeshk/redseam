@@ -13,14 +13,13 @@ function SuccessModal({ handleCloseModal }: SuccessModalProps) {
       <div className="fixed inset-0 z-50 flex items-center justify-center animate-fadeIn">
         <div className="absolute inset-0 bg-[#10151F] opacity-30 backdrop-blur-sm"></div>
         <div className="relative h-[590px] w-[876px] bg-white p-[30px] animate-scaleIn overflow-hidden">
-          
           <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
             <div className="absolute top-20 left-20 w-3 h-3 bg-green-200 rounded-full animate-float-1 opacity-40"></div>
             <div className="absolute top-32 right-32 w-2 h-2 bg-orange-200 rounded-full animate-float-2 opacity-40"></div>
             <div className="absolute bottom-32 left-32 w-4 h-4 bg-blue-200 rounded-full animate-float-3 opacity-40"></div>
             <div className="absolute bottom-20 right-20 w-2 h-2 bg-purple-200 rounded-full animate-float-4 opacity-40"></div>
           </div>
-          
+
           <Image
             src={XMark}
             alt="x"
@@ -29,7 +28,7 @@ function SuccessModal({ handleCloseModal }: SuccessModalProps) {
             className="absolute top-[30px] right-[30px] cursor-pointer hover:rotate-90 hover:scale-110 transition-all duration-300"
             onClick={handleCloseModal}
           />
-          
+
           <div className="relative mx-auto mt-[84px] w-[76px] h-[76px]">
             <div className="absolute inset-0 rounded-full border-2 border-green-200 animate-ping opacity-60"></div>
             <div className="absolute inset-[-8px] rounded-full border border-green-100 animate-pulse opacity-40"></div>
@@ -41,17 +40,17 @@ function SuccessModal({ handleCloseModal }: SuccessModalProps) {
               className="relative z-10 animate-bounce-in"
             />
           </div>
-          
+
           <h1 className="mt-[40px] text-[#10151F] font-semibold text-[42px] leading-[100%] tracking-[0%] text-center animate-slide-up">
-            <span className="bg-gradient-to-r from-green-600 to-emerald-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r text-[#10151F]  bg-clip-text ">
               Congrats
             </span>
           </h1>
-          
+
           <p className="text-[#3E424A] text-center mt-[24px] font-normal text-[14px] leading-[100%] tracking-[0%] animate-slide-up-delayed">
             Your order is placed successfully!
           </p>
-          
+
           <button
             onClick={handleCloseModal}
             className="mt-[76px] rounded-[10px] text-white font-normal text-[14px] leading-[100%] tracking-[0%] cursor-pointer w-[214px] h-[41px] bg-[#FF4000] block mx-auto hover:bg-[#E63600] hover:scale-105 active:scale-95 transition-all duration-200 animate-slide-up-final relative overflow-hidden group shadow-lg hover:shadow-xl"
@@ -64,8 +63,12 @@ function SuccessModal({ handleCloseModal }: SuccessModalProps) {
 
       <style jsx>{`
         @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
 
         @keyframes scaleIn {
@@ -106,28 +109,58 @@ function SuccessModal({ handleCloseModal }: SuccessModalProps) {
         }
 
         @keyframes float-1 {
-          0%, 100% { transform: translateY(0px) translateX(0px); }
-          25% { transform: translateY(-10px) translateX(5px); }
-          50% { transform: translateY(-5px) translateX(-5px); }
-          75% { transform: translateY(-15px) translateX(3px); }
+          0%,
+          100% {
+            transform: translateY(0px) translateX(0px);
+          }
+          25% {
+            transform: translateY(-10px) translateX(5px);
+          }
+          50% {
+            transform: translateY(-5px) translateX(-5px);
+          }
+          75% {
+            transform: translateY(-15px) translateX(3px);
+          }
         }
 
         @keyframes float-2 {
-          0%, 100% { transform: translateY(0px) translateX(0px); }
-          33% { transform: translateY(-8px) translateX(-3px); }
-          66% { transform: translateY(-12px) translateX(4px); }
+          0%,
+          100% {
+            transform: translateY(0px) translateX(0px);
+          }
+          33% {
+            transform: translateY(-8px) translateX(-3px);
+          }
+          66% {
+            transform: translateY(-12px) translateX(4px);
+          }
         }
 
         @keyframes float-3 {
-          0%, 100% { transform: translateY(0px) translateX(0px); }
-          40% { transform: translateY(-6px) translateX(2px); }
-          80% { transform: translateY(-10px) translateX(-4px); }
+          0%,
+          100% {
+            transform: translateY(0px) translateX(0px);
+          }
+          40% {
+            transform: translateY(-6px) translateX(2px);
+          }
+          80% {
+            transform: translateY(-10px) translateX(-4px);
+          }
         }
 
         @keyframes float-4 {
-          0%, 100% { transform: translateY(0px) translateX(0px); }
-          30% { transform: translateY(-7px) translateX(-2px); }
-          60% { transform: translateY(-4px) translateX(3px); }
+          0%,
+          100% {
+            transform: translateY(0px) translateX(0px);
+          }
+          30% {
+            transform: translateY(-7px) translateX(-2px);
+          }
+          60% {
+            transform: translateY(-4px) translateX(3px);
+          }
         }
 
         .animate-fadeIn {
